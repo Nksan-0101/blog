@@ -1,6 +1,6 @@
 const username = "Nksan-0101";  // 你的 GitHub 用户名
 const repo = "Blog";       // 你的 GitHub 仓库名
-const token = "Blog_access";  // 这里要填入 GitHub Token ⚠️ 不能直接暴露在前端，推荐用 GitHub Actions
+const token = "BLOG_ACCESS";  // 这里要填入 GitHub Token ⚠️ 不能直接暴露在前端，推荐用 GitHub Actions
 
 // ✅ 获取博客文章并加载到页面
 async function loadPosts() {
