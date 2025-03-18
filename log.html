@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有日志</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .post { margin: 20px auto; width: 80%; border-bottom: 1px solid #ddd; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>所有日志</h1>
+    <div id="all-posts"></div>
+
+    <script>
+        async function loadPosts() {
+            const response = await fetch('https://raw.githubusercontent.com/Nksan-0101/Myownroom/main/posts.json');
+            const posts = await response.json();
+            let html = "";
+            posts.forEach(post => {
+                html += `<div class="post">
+                            <h2><a href="log.html#${post.id}">${post.title}</a></h2>
+                            <p>${post.date}</p>
+                            <p>${post.content.substring(0, 100)}...</p>
+                         </div>`;
+            });
+            document.getElementById('all-posts').innerHTML = html;
+
+            // 解析 URL hash（单篇文章显示）
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const post = posts.find(p => p.id === hash);
+                if (post) {
+                    document.getElementById('all-posts').innerHTML = `
+                        <h1>${post.title}</h1>
+                        <p>${post.date}</p>
+                        <p>${post.content}</p>
+                        <a href="log.html">返回</a>
+                    `;
+                }
+            }
+        }
+        loadPosts();
+    </script>
+</body>
+</html>
