@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章目录</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .category { margin: 20px auto; width: 80%; }
+    </style>
+</head>
+<body>
+    <h1>文章目录</h1>
+    <div id="categories"></div>
+
+    <script>
+        async function loadCategories() {
+            const response = await fetch('https://raw.githubusercontent.com/Nksan-0101/Myownroom/main/posts.json');
+            const posts = await response.json();
+            let categories = {};
+            posts.forEach(post => {
+                post.categories.forEach(cat => {
+                    if (!categories[cat]) categories[cat] = [];
+                    categories[cat].push(post);
+                });
+            });
+
+            let html = "";
+            Object.keys(categories).forEach(cat => {
+                html += `<div class="category">
+                            <h2>${cat}</h2>
+                            <ul>${categories[cat].map(post => `<li><a href="log.html#${post.id}">${post.title}</a></li>`).join('')}</ul>
+                         </div>`;
+            });
+
+            document.getElementById('categories').innerHTML = html;
+        }
+        loadCategories();
+    </script>
+</body>
+</html>
