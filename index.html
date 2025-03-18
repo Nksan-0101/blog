@@ -22,65 +22,7 @@
     <br><br>
     <button onclick="addPost()">发布文章</button>
 
-    <script>
-        const username = "Nksan-0101";  // 你的 GitHub 用户名
-        const repo = "Myownroom";       // 你的 GitHub 仓库名
-        const token = "Blog_access";  // 你的 GitHub Token ⚠️ 记得替换！
-
-        async function loadPosts() {
-            const response = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/posts.json`);
-            const posts = await response.json();
-            let html = "";
-            posts.slice(0, 5).forEach(post => {
-                html += `<div class="post">
-                            <h2>${post.title}</h2>
-                            <p>${post.date}</p>
-                            <p>${post.content.substring(0, 100)}...</p>
-                         </div>`;
-            });
-            document.getElementById('latest-posts').innerHTML = html;
-        }
-
-        async function addPost() {
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
-            if (!title || !content) return alert("请输入标题和内容");
-
-            const date = new Date().toISOString().split("T")[0];
-            const newPost = { title, date, content };
-
-            // 获取 GitHub 上的 `posts.json`
-            const getRes = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/posts.json`);
-            const getData = await getRes.json();
-            const decodedContent = JSON.parse(atob(getData.content));  // 解码 base64 JSON
-
-            // 添加新文章
-            decodedContent.unshift(newPost);
-            const updatedContent = btoa(JSON.stringify(decodedContent, null, 2));  // 转回 base64
-
-            // 提交到 GitHub
-            const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/posts.json`, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `token ${token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    message: `Add new post: ${title}`,
-                    content: updatedContent,
-                    sha: getData.sha  // GitHub 需要原文件的 sha 值才能修改
-                })
-            });
-
-            if (response.ok) {
-                alert("文章已发布！");
-                location.reload();  // 重新加载页面，显示新文章
-            } else {
-                alert("发布失败，请检查 Token 是否正确");
-            }
-        }
-
-        loadPosts();
-    </script>
+    <!-- 引入外部 JavaScript 文件 -->
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
